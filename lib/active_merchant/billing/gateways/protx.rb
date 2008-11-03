@@ -7,6 +7,10 @@ module ActiveMerchant #:nodoc:
       TEST_URL = 'https://ukvpstest.protx.com/vspgateway/service'
       LIVE_URL = 'https://ukvps.protx.com/vspgateway/service'
       SIMULATOR_URL = 'https://ukvpstest.protx.com/VSPSimulator'
+      
+      THREE_D_TEST_URL = 'https://ukvpstest.protx.com/vspgateway/service/direct3dcallback.vsp'
+      THREE_D_LIVE_URL = 'https://ukvps.protx.com/vspgateway/service/direct3dcallback.vsp'
+      THREE_D_SIMULATOR_URL = 'https://ukvpstest.protx.com/VSPSimulator/VSPDirectCallback.asp'
     
       APPROVED = 'OK'
     
@@ -113,6 +117,10 @@ module ActiveMerchant #:nodoc:
         add_invoice(post, options)
         
         commit(:credit, post)
+      end
+      
+      def three_d_complete(md, pares)
+        commit(:three_d, {'MD' => md, 'PARes' => pares})
       end
       
       private
@@ -243,13 +251,21 @@ module ActiveMerchant #:nodoc:
       end
       
       def build_url(action)
-        endpoint = [ :purchase, :authorization ].include?(action) ? "vspdirect-register" : TRANSACTIONS[action].downcase
-        "#{test? ? TEST_URL : LIVE_URL}/#{endpoint}.vsp"
+        if action == :three_d
+          test? ? THREE_D_TEST_URL : THREE_D_LIVE_URL
+        else
+          endpoint = [ :purchase, :authorization ].include?(action) ? "vspdirect-register" : TRANSACTIONS[action].downcase
+          "#{test? ? TEST_URL : LIVE_URL}/#{endpoint}.vsp"
+        end
       end
       
       def build_simulator_url(action)
-        endpoint = [ :purchase, :authorization ].include?(action) ? "VSPDirectGateway.asp" : "VSPServerGateway.asp?Service=Vendor#{TRANSACTIONS[action].capitalize}Tx"
-        "#{SIMULATOR_URL}/#{endpoint}"
+        if action == :three_d
+          endpoint = [ :purchase, :authorization ].include?(action) ? "VSPDirectGateway.asp" : "VSPServerGateway.asp?Service=Vendor#{TRANSACTIONS[action].capitalize}Tx"
+          "#{SIMULATOR_URL}/#{endpoint}"
+        else
+          THREE_D_SIMULATOR_URL
+        end
       end
 
       def message_from(response)

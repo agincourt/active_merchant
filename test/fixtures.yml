@@ -123,7 +123,7 @@ plugnpay:
   password: PASSWORD
   
 protx:
-  login: LOGIN
+  login: justtv
   
 # Working credentials, no need to replace
 psigate:
