@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 require 'net/http'
+require 'net/https'
 require 'uri'
 
 
@@ -114,18 +115,22 @@ class Remote3DProtxTest < Test::Unit::TestCase
     
     #Now test that when we post the MD and PaReq we get a 200 status
     url = URI.parse(response.params['ACSURL'])
+    #url = URI.parse('http://www.realalehunter.co.uk')
     puts url.inspect
     req = Net::HTTP::Post.new(url.path)
-    req.set_form_data({'MD' => response.params['MD'], 'PaReq' => response.params['PaReq']})
-    res = Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+        
+    req.set_form_data({'MD' => response.params['MD'], 'PaReq' => response.params['PAReq']})
+    puts "ABOUT TO START REQUEST"
+    res = Net::HTTP.new(url.host, url.port)
+    res.use_ssl = (url.port == 443)
+    res.start {|http| http.request(req) }
+    puts "THE RES IS #{res.inspect}"
     case res
     when Net::HTTPSuccess, Net::HTTPRedirection
       puts "OK"
     else
-      res.error!
+      puts "ERR #{res.body}"
     end
-    
-    puts req.inspect
   end
   
   # def test_invalid_three_d_complete

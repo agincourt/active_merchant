@@ -61,7 +61,7 @@ module ActiveMerchant #:nodoc:
       include CreditCardFormatting
       include Utils
       
-      DEBIT_CARDS = [ :switch, :solo ]
+      DEBIT_CARDS = [ :switch, :solo, :maestro ]
       
       cattr_reader :implementations
       @@implementations = []
