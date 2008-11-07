@@ -221,7 +221,6 @@ module ActiveMerchant #:nodoc:
         
         year  = sprintf("%.4i", year)
         month = sprintf("%.2i", month)
-
         "#{month}#{year[-2..-1]}"
       end
       
@@ -278,7 +277,6 @@ module ActiveMerchant #:nodoc:
           :TxType => TRANSACTIONS[action],
           :VPSProtocol => "2.22"
         )
-        
         parameters.collect { |key, value| "#{key}=#{CGI.escape(value.to_s)}" }.join("&")
       end
       
