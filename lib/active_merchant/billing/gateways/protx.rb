@@ -19,7 +19,8 @@ module ActiveMerchant #:nodoc:
         :credit => 'REFUND',
         :authorization => 'DEFERRED',
         :capture => 'RELEASE',
-        :void => 'VOID'
+        :void => 'VOID',
+        :abort => 'ABORT'
       }
       
       CREDIT_CARDS = {
@@ -104,6 +105,13 @@ module ActiveMerchant #:nodoc:
         
         add_reference(post, identification)
         commit(:void, post)
+      end
+      
+      def abort(identification, options = {})
+        post = {}
+        
+        add_reference(post, identification)
+        commit(:abort, post)
       end
       
       # Crediting requires a new order_id to passed in, as well as a description
