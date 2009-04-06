@@ -285,10 +285,10 @@ module ActiveMerchant #:nodoc:
       
       def build_simulator_url(action)
         if action == :three_d
+          THREE_D_SIMULATOR_URL
+        else
           endpoint = [ :purchase, :authorization ].include?(action) ? "VSPDirectGateway.asp" : "VSPServerGateway.asp?Service=Vendor#{TRANSACTIONS[action].capitalize}Tx"
           "#{SIMULATOR_URL}/#{endpoint}"
-        else
-          THREE_D_SIMULATOR_URL
         end
       end
 
