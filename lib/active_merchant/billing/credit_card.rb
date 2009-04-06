@@ -142,9 +142,9 @@ module ActiveMerchant #:nodoc:
       def validate_switch_or_solo_attributes #:nodoc:
         if %w[switch solo].include?(type)
           unless valid_month?(@start_month) && valid_start_year?(@start_year) || valid_issue_number?(@issue_number)
-            errors.add :start_month,  "is invalid"      unless valid_month?(@start_month)
-            errors.add :start_year,   "is invalid"      unless valid_start_year?(@start_year)
-            errors.add :issue_number, "cannot be empty" unless valid_issue_number?(@issue_number)
+            errors.add :start_month,  "is invalid"      unless @start_month == 0 || valid_month?(@start_month)
+            errors.add :start_year,   "is invalid"      unless @start_year == 0 || valid_start_year?(@start_year)
+            errors.add :issue_number, "cannot be empty" unless @issue_number.blank? || valid_issue_number?(@issue_number)
           end
         end
       end
